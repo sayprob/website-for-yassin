@@ -41,13 +41,13 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, isVisible, onCl
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-8">
         <div className="text-center mb-6">
-          <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Lock className="w-8 h-8 text-slate-600" />
+          <div className="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-8 h-8 text-slate-600 dark:text-slate-300" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">Admin Login</h2>
-          <p className="text-slate-600">Enter admin password to manage donations</p>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">Admin Login</h2>
+          <p className="text-slate-600 dark:text-slate-300">Enter admin password to manage donations</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -57,13 +57,13 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, isVisible, onCl
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter admin password"
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
+              className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
               required
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors duration-200"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors duration-200"
             >
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
@@ -79,7 +79,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, isVisible, onCl
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors duration-200"
+              className="flex-1 px-4 py-3 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-200"
             >
               Cancel
             </button>
@@ -94,7 +94,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, isVisible, onCl
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-400 dark:text-slate-500">
             Default password: admin123
           </p>
         </div>

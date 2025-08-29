@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Plus, ArrowLeft, Settings, LogOut, Calendar, DollarSign } from 'lucide-react';
+import { Plus, ArrowLeft, Settings, LogOut, Calendar, DollarSign, Moon, Sun } from 'lucide-react';
 import { DonationData, Expense } from './types';
 import { loadDonationsFromFile, saveDonationsToFile, loadExpensesFromFile, saveExpensesToFile } from './utils/fileManager';
 import { AdminLogin } from './components/AdminLogin';
@@ -22,6 +22,7 @@ function App() {
   const [isSaving, setIsSaving] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -41,6 +42,10 @@ function App() {
         // Check if user is already logged in as admin
         const adminStatus = localStorage.getItem('isAdmin');
         setIsAdmin(adminStatus === 'true');
+        
+        // Check dark mode preference
+        const darkMode = localStorage.getItem('darkMode');
+        setIsDarkMode(darkMode === 'true');
       } catch (error) {
         console.error('Failed to load donations:', error);
       } finally {
@@ -62,6 +67,12 @@ function App() {
   const handleAdminLogout = () => {
     localStorage.removeItem('isAdmin');
     setIsAdmin(false);
+  };
+
+  const toggleDarkMode = () => {
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
+    localStorage.setItem('darkMode', newDarkMode.toString());
   };
 
   const handleRedButtonClick = () => {
@@ -203,7 +214,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-6">
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gradient-to-br from-slate-900 to-slate-800' : 'bg-gradient-to-br from-slate-50 to-slate-100'} flex items-center justify-center p-6 transition-colors duration-300`}>
       {/* Admin Login Modal */}
       <AdminLogin 
         onLogin={handleAdminLogin}
@@ -212,24 +223,34 @@ function App() {
       />
 
       {/* Admin Controls */}
-      <div className="fixed top-4 right-4 z-40">
-        {isAdmin ? (
-          <button
-            onClick={handleAdminLogout}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2"
-          >
-            <LogOut className="w-4 h-4" />
-            Logout Admin
-          </button>
-        ) : (
-          <button
-            onClick={() => setShowAdminLogin(true)}
-            className="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2"
-          >
-            <Settings className="w-4 h-4" />
-            Admin
-          </button>
-        )}
+      <div className="fixed top-4 right-4 z-40 flex gap-2">
+        {/* Dark Mode Toggle */}
+        <button
+          onClick={toggleDarkMode}
+          className={`${isDarkMode ? 'bg-slate-700 hover:bg-slate-600 text-yellow-400' : 'bg-slate-200 hover:bg-slate-300 text-slate-700'} px-3 py-2 rounded-lg shadow-lg transition-colors duration-200`}
+        >
+          {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        </button>
+        
+        {/* Admin Button */}
+        <div>
+          {isAdmin ? (
+            <button
+              onClick={handleAdminLogout}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => setShowAdminLogin(true)}
+              className={`${isDarkMode ? 'bg-slate-700 hover:bg-slate-600' : 'bg-slate-600 hover:bg-slate-700'} text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200`}
+            >
+              <Settings className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="max-w-4xl w-full">
@@ -237,10 +258,10 @@ function App() {
           <>
             {/* Header Section */}
             <div className="text-center mb-16">
-              <h1 className="text-5xl md:text-6xl font-light text-slate-800 mb-4 tracking-tight">
+              <h1 className={`text-5xl md:text-6xl font-light ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4 tracking-tight`}>
                 Welcome
               </h1>
-              <p className="text-xl text-slate-600 font-light max-w-2xl mx-auto leading-relaxed">
+              <p className={`text-xl ${isDarkMode ? 'text-slate-300' : 'text-slate-600'} font-light max-w-2xl mx-auto leading-relaxed`}>
                 Donation tracking system with local database
               </p>
             </div>
@@ -250,7 +271,7 @@ function App() {
               {/* Left Button - Red */}
               <button 
                 onClick={handleRedButtonClick}
-                className="group relative bg-white hover:bg-red-50 border-2 border-red-100 hover:border-red-200 rounded-2xl p-8 md:p-12 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[200px] md:min-w-[240px]"
+                className={`group relative ${isDarkMode ? 'bg-slate-800 hover:bg-red-900 border-2 border-red-800 hover:border-red-700' : 'bg-white hover:bg-red-50 border-2 border-red-100 hover:border-red-200'} rounded-2xl p-8 md:p-12 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[200px] md:min-w-[240px]`}
               >
                 <div className="text-center">
                   <div className="text-6xl md:text-7xl font-bold text-red-500 mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -264,7 +285,7 @@ function App() {
               <button 
                 onClick={() => availableYears.length > 0 && setShowYears(true)}
                 disabled={availableYears.length === 0}
-                className={`group relative ${availableYears.length > 0 ? 'bg-white hover:bg-green-50 border-2 border-green-100 hover:border-green-200' : 'bg-gray-100 border-2 border-gray-200 cursor-not-allowed'} rounded-2xl p-8 md:p-12 shadow-lg ${availableYears.length > 0 ? 'hover:shadow-xl' : ''} transition-all duration-300 ${availableYears.length > 0 ? 'transform hover:-translate-y-1' : ''} min-w-[200px] md:min-w-[240px]`}
+                className={`group relative ${availableYears.length > 0 ? (isDarkMode ? 'bg-slate-800 hover:bg-green-900 border-2 border-green-800 hover:border-green-700' : 'bg-white hover:bg-green-50 border-2 border-green-100 hover:border-green-200') : (isDarkMode ? 'bg-slate-700 border-2 border-slate-600 cursor-not-allowed' : 'bg-gray-100 border-2 border-gray-200 cursor-not-allowed')} rounded-2xl p-8 md:p-12 shadow-lg ${availableYears.length > 0 ? 'hover:shadow-xl' : ''} transition-all duration-300 ${availableYears.length > 0 ? 'transform hover:-translate-y-1' : ''} min-w-[200px] md:min-w-[240px]`}
               >
                 <div className="text-center">
                   <div className={`text-4xl md:text-5xl font-bold ${availableYears.length > 0 ? 'text-green-500' : 'text-gray-400'} mb-4 ${availableYears.length > 0 ? 'group-hover:scale-110' : ''} transition-transform duration-300`}>
@@ -281,12 +302,12 @@ function App() {
           <>
             {/* Years Section */}
             <div className="text-center mb-16">
-              <h1 className="text-4xl md:text-5xl font-light text-slate-800 mb-4 tracking-tight">
+              <h1 className={`text-4xl md:text-5xl font-light ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4 tracking-tight`}>
                 Select a Year
               </h1>
               <button 
                 onClick={() => setShowYears(false)}
-                className="text-slate-500 hover:text-slate-700 transition-colors duration-200 text-sm font-medium flex items-center gap-1 mx-auto"
+                className={`${isDarkMode ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-700'} transition-colors duration-200 text-sm font-medium flex items-center gap-1 mx-auto`}
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to main
@@ -299,10 +320,10 @@ function App() {
                 <button 
                   key={year}
                   onClick={() => handleYearClick(year)}
-                  className="group relative bg-white hover:bg-green-50 border-2 border-green-100 hover:border-green-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                  className={`group relative ${isDarkMode ? 'bg-slate-800 hover:bg-green-900 border-2 border-green-800 hover:border-green-700' : 'bg-white hover:bg-green-50 border-2 border-green-100 hover:border-green-200'} rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1`}
                 >
                   <div className="text-center">
-                    <div className="text-2xl md:text-3xl font-bold text-slate-800 mb-2 group-hover:scale-105 transition-transform duration-300">
+                    <div className={`text-2xl md:text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-2 group-hover:scale-105 transition-transform duration-300`}>
                       {year}
                     </div>
                     <div className="text-lg font-semibold text-green-500 group-hover:scale-110 transition-transform duration-300">
@@ -318,13 +339,13 @@ function App() {
           <>
             {/* Donations Table Section */}
             <div className="text-center mb-8">
-              <h1 className="text-3xl md:text-4xl font-light text-slate-800 mb-2 tracking-tight">
+              <h1 className={`text-3xl md:text-4xl font-light ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-2 tracking-tight`}>
                 Donations for {selectedYear}
               </h1>
               <div className="flex items-center justify-center gap-4">
                 <button 
                   onClick={() => setSelectedYear(null)}
-                  className="text-slate-500 hover:text-slate-700 transition-colors duration-200 text-sm font-medium flex items-center gap-1 mx-auto"
+                  className={`${isDarkMode ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-700'} transition-colors duration-200 text-sm font-medium flex items-center gap-1 mx-auto`}
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Back to years
@@ -333,13 +354,13 @@ function App() {
             </div>
 
             {/* Donations Table */}
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div className={`${isDarkMode ? 'bg-slate-800' : 'bg-white'} rounded-2xl shadow-lg overflow-hidden`}>
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-slate-50 border-b border-slate-200">
+                  <thead className={`${isDarkMode ? 'bg-slate-700 border-b border-slate-600' : 'bg-slate-50 border-b border-slate-200'}`}>
                     <tr>
                       {months.map(month => (
-                        <th key={month} className="px-4 py-4 text-left text-sm font-semibold text-slate-700 min-w-[140px]">
+                        <th key={month} className={`px-4 py-4 text-left text-sm font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} min-w-[140px]`}>
                           {month}
                         </th>
                       ))}
@@ -352,11 +373,11 @@ function App() {
                         const monthDonations = donations[monthKey] || [];
                         
                         return (
-                          <td key={month} className="px-4 py-4 border-r border-slate-100 last:border-r-0">
+                          <td key={month} className={`px-4 py-4 ${isDarkMode ? 'border-r border-slate-700' : 'border-r border-slate-100'} last:border-r-0`}>
                             <div className="space-y-2">
                               {monthDonations.map((donation, index) => (
-                                <div key={index} className="bg-slate-50 rounded-lg p-3 border border-slate-200">
-                                  <div className="text-sm font-medium text-slate-800 mb-1">
+                                <div key={index} className={`${isDarkMode ? 'bg-slate-700 border border-slate-600' : 'bg-slate-50 border border-slate-200'} rounded-lg p-3`}>
+                                  <div className={`text-sm font-medium ${isDarkMode ? 'text-slate-200' : 'text-slate-800'} mb-1`}>
                                     {donation.name}
                                   </div>
                                   <div className="text-lg font-bold text-green-600">
@@ -367,20 +388,20 @@ function App() {
                               
                               {/* Add Button */}
                               {isAdmin && showAddForm?.month === month ? (
-                                <div className="bg-blue-50 rounded-lg p-3 border-2 border-blue-200">
+                                <div className={`${isDarkMode ? 'bg-blue-900 border-2 border-blue-700' : 'bg-blue-50 border-2 border-blue-200'} rounded-lg p-3`}>
                                   <input
                                     type="text"
                                     placeholder="Donor name"
                                     value={newDonorName}
                                     onChange={(e) => setNewDonorName(e.target.value)}
-                                    className="w-full text-sm border border-slate-300 rounded px-2 py-1 mb-2 focus:outline-none focus:border-blue-500"
+                                    className={`w-full text-sm border ${isDarkMode ? 'border-slate-600 bg-slate-800 text-white' : 'border-slate-300 bg-white'} rounded px-2 py-1 mb-2 focus:outline-none focus:border-blue-500`}
                                   />
                                   <input
                                     type="number"
                                     placeholder="Amount"
                                     value={newDonorAmount}
                                     onChange={(e) => setNewDonorAmount(e.target.value)}
-                                    className="w-full text-sm border border-slate-300 rounded px-2 py-1 mb-2 focus:outline-none focus:border-blue-500"
+                                    className={`w-full text-sm border ${isDarkMode ? 'border-slate-600 bg-slate-800 text-white' : 'border-slate-300 bg-white'} rounded px-2 py-1 mb-2 focus:outline-none focus:border-blue-500`}
                                   />
                                   <div className="flex gap-1">
                                     <button
@@ -393,7 +414,7 @@ function App() {
                                     <button
                                       onClick={() => setShowAddForm(null)}
                                       disabled={isSaving}
-                                      className="flex-1 bg-slate-400 hover:bg-slate-500 text-white text-xs py-1 px-2 rounded transition-colors duration-200"
+                                      className={`flex-1 ${isDarkMode ? 'bg-slate-600 hover:bg-slate-500' : 'bg-slate-400 hover:bg-slate-500'} text-white text-xs py-1 px-2 rounded transition-colors duration-200`}
                                     >
                                       Cancel
                                     </button>
@@ -402,9 +423,9 @@ function App() {
                               ) : isAdmin ? (
                                 <button
                                   onClick={() => setShowAddForm({month})}
-                                  className="w-full bg-slate-100 hover:bg-slate-200 border-2 border-dashed border-slate-300 hover:border-slate-400 rounded-lg p-3 transition-all duration-200 group"
+                                  className={`w-full ${isDarkMode ? 'bg-slate-700 hover:bg-slate-600 border-2 border-dashed border-slate-600 hover:border-slate-500' : 'bg-slate-100 hover:bg-slate-200 border-2 border-dashed border-slate-300 hover:border-slate-400'} rounded-lg p-3 transition-all duration-200 group`}
                                 >
-                                  <Plus className="w-5 h-5 text-slate-400 group-hover:text-slate-600 mx-auto" />
+                                  <Plus className={`w-5 h-5 ${isDarkMode ? 'text-slate-500 group-hover:text-slate-300' : 'text-slate-400 group-hover:text-slate-600'} mx-auto`} />
                                 </button>
                               ) : null}
                             </div>
@@ -421,13 +442,13 @@ function App() {
           <>
             {/* Expenses Table Section */}
             <div className="text-center mb-8">
-              <h1 className="text-3xl md:text-4xl font-light text-slate-800 mb-2 tracking-tight">
+              <h1 className={`text-3xl md:text-4xl font-light ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-2 tracking-tight`}>
                 Expenses Overview
               </h1>
               <div className="flex items-center justify-center gap-4 mb-4">
                 <button 
                   onClick={() => setShowExpenses(false)}
-                  className="text-slate-500 hover:text-slate-700 transition-colors duration-200 text-sm font-medium flex items-center gap-1 mx-auto"
+                  className={`${isDarkMode ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-700'} transition-colors duration-200 text-sm font-medium flex items-center gap-1 mx-auto`}
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Back to main
@@ -437,63 +458,6 @@ function App() {
                 Total Expenses: ${getTotalExpenses().toLocaleString()}
               </div>
             </div>
-
-            {/* Add Expense Form */}
-            {isAdmin && showAddExpenseForm && (
-              <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-                <h3 className="text-lg font-semibold text-slate-800 mb-4">Add New Expense</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Date</label>
-                    <input
-                      type="date"
-                      value={newExpenseDate}
-                      onChange={(e) => setNewExpenseDate(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Amount</label>
-                    <input
-                      type="number"
-                      placeholder="0.00"
-                      value={newExpenseAmount}
-                      onChange={(e) => setNewExpenseAmount(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Description</label>
-                    <input
-                      type="text"
-                      placeholder="What was this expense for?"
-                      value={newExpenseDescription}
-                      onChange={(e) => setNewExpenseDescription(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-3 mt-4">
-                  <button
-                    onClick={() => setShowAddExpenseForm(false)}
-                    disabled={isSaving}
-                    className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors duration-200"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleAddExpense}
-                    disabled={isSaving || !newExpenseDate || !newExpenseAmount || !newExpenseDescription}
-                    className="px-4 py-2 bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white rounded-lg transition-colors duration-200"
-                  >
-                    {isSaving ? 'Saving...' : 'Add Expense'}
-                  </button>
-                </div>
-              </div>
-            )}
 
             {/* Add Expense Button */}
             {isAdmin && !showAddExpenseForm && (
@@ -508,23 +472,80 @@ function App() {
               </div>
             )}
 
+            {/* Add Expense Form */}
+            {isAdmin && showAddExpenseForm && (
+              <div className={`${isDarkMode ? 'bg-slate-800' : 'bg-white'} rounded-2xl shadow-lg p-6 mb-6`}>
+                <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4`}>Add New Expense</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className={`block text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} mb-2`}>Date</label>
+                    <input
+                      type="date"
+                      value={newExpenseDate}
+                      onChange={(e) => setNewExpenseDate(e.target.value)}
+                      className={`w-full px-3 py-2 border ${isDarkMode ? 'border-slate-600 bg-slate-700 text-white' : 'border-slate-300 bg-white'} rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200`}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className={`block text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} mb-2`}>Amount</label>
+                    <input
+                      type="number"
+                      placeholder="0.00"
+                      value={newExpenseAmount}
+                      onChange={(e) => setNewExpenseAmount(e.target.value)}
+                      className={`w-full px-3 py-2 border ${isDarkMode ? 'border-slate-600 bg-slate-700 text-white' : 'border-slate-300 bg-white'} rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200`}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className={`block text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} mb-2`}>Description</label>
+                    <input
+                      type="text"
+                      placeholder="What was this expense for?"
+                      value={newExpenseDescription}
+                      onChange={(e) => setNewExpenseDescription(e.target.value)}
+                      className={`w-full px-3 py-2 border ${isDarkMode ? 'border-slate-600 bg-slate-700 text-white' : 'border-slate-300 bg-white'} rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200`}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-3 mt-4">
+                  <button
+                    onClick={() => setShowAddExpenseForm(false)}
+                    disabled={isSaving}
+                    className={`px-4 py-2 border ${isDarkMode ? 'border-slate-600 text-slate-300 hover:bg-slate-700' : 'border-slate-300 text-slate-700 hover:bg-slate-50'} rounded-lg transition-colors duration-200`}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddExpense}
+                    disabled={isSaving || !newExpenseDate || !newExpenseAmount || !newExpenseDescription}
+                    className="px-4 py-2 bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white rounded-lg transition-colors duration-200"
+                  >
+                    {isSaving ? 'Saving...' : 'Add Expense'}
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Expenses Table */}
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div className={`${isDarkMode ? 'bg-slate-800' : 'bg-white'} rounded-2xl shadow-lg overflow-hidden`}>
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-red-50 border-b border-red-200">
+                  <thead className={`${isDarkMode ? 'bg-red-900 border-b border-red-800' : 'bg-red-50 border-b border-red-200'}`}>
                     <tr>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-red-700 flex items-center gap-2">
+                      <th className={`px-6 py-4 text-left text-sm font-semibold ${isDarkMode ? 'text-red-300' : 'text-red-700'} flex items-center gap-2`}>
                         <Calendar className="w-4 h-4" />
                         Date
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-red-700">
+                      <th className={`px-6 py-4 text-left text-sm font-semibold ${isDarkMode ? 'text-red-300' : 'text-red-700'}`}>
                         <div className="flex items-center gap-2">
                           <DollarSign className="w-4 h-4" />
                           Amount
                         </div>
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-red-700">
+                      <th className={`px-6 py-4 text-left text-sm font-semibold ${isDarkMode ? 'text-red-300' : 'text-red-700'}`}>
                         Description
                       </th>
                     </tr>
@@ -532,14 +553,14 @@ function App() {
                   <tbody>
                     {expenses.length === 0 ? (
                       <tr>
-                        <td colSpan={3} className="px-6 py-8 text-center text-slate-500">
+                        <td colSpan={3} className={`px-6 py-8 text-center ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
                           No expenses recorded yet
                         </td>
                       </tr>
                     ) : (
                       expenses.map((expense, index) => (
-                        <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors duration-200">
-                          <td className="px-6 py-4 text-sm font-medium text-slate-800">
+                        <tr key={index} className={`${isDarkMode ? 'border-b border-slate-700 hover:bg-slate-700' : 'border-b border-slate-100 hover:bg-slate-50'} transition-colors duration-200`}>
+                          <td className={`px-6 py-4 text-sm font-medium ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>
                             {new Date(expense.date).toLocaleDateString('en-US', {
                               year: 'numeric',
                               month: 'long',
@@ -549,7 +570,7 @@ function App() {
                           <td className="px-6 py-4 text-lg font-bold text-red-600">
                             ${expense.amount.toLocaleString()}
                           </td>
-                          <td className="px-6 py-4 text-sm text-slate-700 leading-relaxed">
+                          <td className={`px-6 py-4 text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} leading-relaxed`}>
                             {expense.description}
                           </td>
                         </tr>
