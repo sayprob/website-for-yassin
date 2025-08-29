@@ -111,10 +111,7 @@ function App() {
                 className="group relative bg-white hover:bg-green-50 border-2 border-green-100 hover:border-green-200 rounded-2xl p-8 md:p-12 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[200px] md:min-w-[240px]"
               >
                 <div className="text-center">
-                  <div className="text-6xl md:text-7xl font-bold text-green-500 mb-4 group-hover:scale-110 transition-transform duration-300">
-                    2
-                  </div>
-                  <div className="text-lg font-semibold text-green-500 group-hover:scale-110 transition-transform duration-300">
+                  <div className="text-4xl md:text-5xl font-bold text-green-500 mb-4 group-hover:scale-110 transition-transform duration-300">
                     ${getAllYearsTotal().toLocaleString()}
                   </div>
                 </div>
