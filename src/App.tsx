@@ -17,6 +17,9 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   
+  // Red number represents expenses or target amount
+  const redNumber = 5000;
+  
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
@@ -135,6 +138,10 @@ function App() {
     return years.reduce((total, year) => total + getYearTotal(year), 0);
   };
 
+  const getNetAmount = () => {
+    return getAllYearsTotal() - redNumber;
+  };
+
   const availableYears = getAvailableYears();
 
   if (isLoading) {
@@ -197,7 +204,7 @@ function App() {
               <button className="group relative bg-white hover:bg-red-50 border-2 border-red-100 hover:border-red-200 rounded-2xl p-8 md:p-12 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[200px] md:min-w-[240px]">
                 <div className="text-center">
                   <div className="text-6xl md:text-7xl font-bold text-red-500 mb-4 group-hover:scale-110 transition-transform duration-300">
-                    1
+                    ${redNumber.toLocaleString()}
                   </div>
                 </div>
                 <div className="absolute inset-0 bg-red-500 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
@@ -211,7 +218,7 @@ function App() {
               >
                 <div className="text-center">
                   <div className={`text-4xl md:text-5xl font-bold ${availableYears.length > 0 ? 'text-green-500' : 'text-gray-400'} mb-4 ${availableYears.length > 0 ? 'group-hover:scale-110' : ''} transition-transform duration-300`}>
-                    ${getAllYearsTotal().toLocaleString()}
+                    ${getNetAmount().toLocaleString()}
                   </div>
                 </div>
                 {availableYears.length > 0 && (
