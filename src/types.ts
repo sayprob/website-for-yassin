@@ -13,3 +13,9 @@ export interface ExcelRow {
   'Donor Name'?: string;
   'Donation Amount'?: number;
 }
+
+export interface Expense {
+  date: string;
+  amount: number;
+  description: string;
+}

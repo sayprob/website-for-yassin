@@ -1,24 +1,27 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Plus, ArrowLeft, Settings, LogOut } from 'lucide-react';
-import { DonationData } from './types';
-import { loadDonationsFromFile, saveDonationsToFile } from './utils/fileManager';
+import { Plus, ArrowLeft, Settings, LogOut, Calendar, DollarSign } from 'lucide-react';
+import { DonationData, Expense } from './types';
+import { loadDonationsFromFile, saveDonationsToFile, loadExpensesFromFile, saveExpensesToFile } from './utils/fileManager';
 import { AdminLogin } from './components/AdminLogin';
 
 function App() {
   const [showYears, setShowYears] = useState(false);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [showExpenses, setShowExpenses] = useState(false);
   const [donations, setDonations] = useState<DonationData>({});
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [showAddForm, setShowAddForm] = useState<{month: string} | null>(null);
+  const [showAddExpenseForm, setShowAddExpenseForm] = useState(false);
   const [newDonorName, setNewDonorName] = useState('');
   const [newDonorAmount, setNewDonorAmount] = useState('');
+  const [newExpenseDate, setNewExpenseDate] = useState('');
+  const [newExpenseAmount, setNewExpenseAmount] = useState('');
+  const [newExpenseDescription, setNewExpenseDescription] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
-  
-  // Red number represents expenses or target amount
-  const redNumber = 5000;
   
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -30,8 +33,10 @@ function App() {
     const loadData = async () => {
       try {
         const data = await loadDonationsFromFile();
+        const expensesData = await loadExpensesFromFile();
         setDonations(data);
-        setShowYears(true);
+        setExpenses(expensesData);
+        // Don't auto-show years anymore, start at main page
         
         // Check if user is already logged in as admin
         const adminStatus = localStorage.getItem('isAdmin');
@@ -46,6 +51,10 @@ function App() {
     loadData();
   }, []);
 
+  const getTotalExpenses = () => {
+    return expenses.reduce((total, expense) => total + expense.amount, 0);
+  };
+
   const handleAdminLogin = (success: boolean) => {
     setIsAdmin(success);
   };
@@ -53,6 +62,10 @@ function App() {
   const handleAdminLogout = () => {
     localStorage.removeItem('isAdmin');
     setIsAdmin(false);
+  };
+
+  const handleRedButtonClick = () => {
+    setShowExpenses(true);
   };
 
   // Get available years from the donations data
@@ -100,6 +113,40 @@ function App() {
     }
   };
 
+  const handleAddExpense = async () => {
+    if (newExpenseDate.trim() && newExpenseAmount.trim() && newExpenseDescription.trim()) {
+      const amount = parseFloat(newExpenseAmount);
+      
+      if (!isNaN(amount) && amount > 0) {
+        setIsSaving(true);
+        
+        const newExpense: Expense = {
+          date: newExpenseDate,
+          amount,
+          description: newExpenseDescription.trim()
+        };
+        
+        const updatedExpenses = [...expenses, newExpense].sort((a, b) => 
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+        
+        try {
+          await saveExpensesToFile(updatedExpenses);
+          setExpenses(updatedExpenses);
+          setNewExpenseDate('');
+          setNewExpenseAmount('');
+          setNewExpenseDescription('');
+          setShowAddExpenseForm(false);
+        } catch (error) {
+          console.error('Failed to save expense:', error);
+          alert('Failed to save expense. Please try again.');
+        } finally {
+          setIsSaving(false);
+        }
+      }
+    }
+  };
+
   const handleAddDonationOld = (month: string) => {
     if (newDonorName.trim() && newDonorAmount.trim() && selectedYear) {
       const monthKey = `${selectedYear}-${month}`;
@@ -139,7 +186,7 @@ function App() {
   };
 
   const getNetAmount = () => {
-    return getAllYearsTotal() - redNumber;
+    return getAllYearsTotal() - getTotalExpenses();
   };
 
   const availableYears = getAvailableYears();
@@ -186,7 +233,7 @@ function App() {
       </div>
 
       <div className="max-w-4xl w-full">
-        {!showYears && !selectedYear ? (
+        {!showYears && !selectedYear && !showExpenses ? (
           <>
             {/* Header Section */}
             <div className="text-center mb-16">
@@ -201,10 +248,13 @@ function App() {
             {/* Buttons Section */}
             <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
               {/* Left Button - Red */}
-              <button className="group relative bg-white hover:bg-red-50 border-2 border-red-100 hover:border-red-200 rounded-2xl p-8 md:p-12 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[200px] md:min-w-[240px]">
+              <button 
+                onClick={handleRedButtonClick}
+                className="group relative bg-white hover:bg-red-50 border-2 border-red-100 hover:border-red-200 rounded-2xl p-8 md:p-12 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[200px] md:min-w-[240px]"
+              >
                 <div className="text-center">
                   <div className="text-6xl md:text-7xl font-bold text-red-500 mb-4 group-hover:scale-110 transition-transform duration-300">
-                    ${redNumber.toLocaleString()}
+                    ${getTotalExpenses().toLocaleString()}
                   </div>
                 </div>
                 <div className="absolute inset-0 bg-red-500 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
@@ -227,7 +277,7 @@ function App() {
               </button>
             </div>
           </>
-        ) : showYears && !selectedYear ? (
+        ) : showYears && !selectedYear && !showExpenses ? (
           <>
             {/* Years Section */}
             <div className="text-center mb-16">
@@ -236,9 +286,10 @@ function App() {
               </h1>
               <button 
                 onClick={() => setShowYears(false)}
-                className="text-slate-500 hover:text-slate-700 transition-colors duration-200 text-sm font-medium"
+                className="text-slate-500 hover:text-slate-700 transition-colors duration-200 text-sm font-medium flex items-center gap-1 mx-auto"
               >
-                ← Back to main
+                <ArrowLeft className="w-4 h-4" />
+                Back to main
               </button>
             </div>
 
@@ -263,7 +314,7 @@ function App() {
               ))}
             </div>
           </>
-        ) : selectedYear ? (
+        ) : selectedYear && !showExpenses ? (
           <>
             {/* Donations Table Section */}
             <div className="text-center mb-8">
@@ -273,7 +324,7 @@ function App() {
               <div className="flex items-center justify-center gap-4">
                 <button 
                   onClick={() => setSelectedYear(null)}
-                  className="text-slate-500 hover:text-slate-700 transition-colors duration-200 text-sm font-medium flex items-center gap-1"
+                  className="text-slate-500 hover:text-slate-700 transition-colors duration-200 text-sm font-medium flex items-center gap-1 mx-auto"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Back to years
@@ -361,6 +412,149 @@ function App() {
                         );
                       })}
                     </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        ) : showExpenses ? (
+          <>
+            {/* Expenses Table Section */}
+            <div className="text-center mb-8">
+              <h1 className="text-3xl md:text-4xl font-light text-slate-800 mb-2 tracking-tight">
+                Expenses Overview
+              </h1>
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <button 
+                  onClick={() => setShowExpenses(false)}
+                  className="text-slate-500 hover:text-slate-700 transition-colors duration-200 text-sm font-medium flex items-center gap-1 mx-auto"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Back to main
+                </button>
+              </div>
+              <div className="text-2xl font-bold text-red-500 mb-6">
+                Total Expenses: ${getTotalExpenses().toLocaleString()}
+              </div>
+            </div>
+
+            {/* Add Expense Form */}
+            {isAdmin && showAddExpenseForm && (
+              <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">Add New Expense</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Date</label>
+                    <input
+                      type="date"
+                      value={newExpenseDate}
+                      onChange={(e) => setNewExpenseDate(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Amount</label>
+                    <input
+                      type="number"
+                      placeholder="0.00"
+                      value={newExpenseAmount}
+                      onChange={(e) => setNewExpenseAmount(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Description</label>
+                    <input
+                      type="text"
+                      placeholder="What was this expense for?"
+                      value={newExpenseDescription}
+                      onChange={(e) => setNewExpenseDescription(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-3 mt-4">
+                  <button
+                    onClick={() => setShowAddExpenseForm(false)}
+                    disabled={isSaving}
+                    className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors duration-200"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddExpense}
+                    disabled={isSaving || !newExpenseDate || !newExpenseAmount || !newExpenseDescription}
+                    className="px-4 py-2 bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white rounded-lg transition-colors duration-200"
+                  >
+                    {isSaving ? 'Saving...' : 'Add Expense'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Add Expense Button */}
+            {isAdmin && !showAddExpenseForm && (
+              <div className="text-center mb-6">
+                <button
+                  onClick={() => setShowAddExpenseForm(true)}
+                  className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2 mx-auto"
+                >
+                  <Plus className="w-5 h-5" />
+                  Add Expense
+                </button>
+              </div>
+            )}
+
+            {/* Expenses Table */}
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-red-50 border-b border-red-200">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-red-700 flex items-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        Date
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-red-700">
+                        <div className="flex items-center gap-2">
+                          <DollarSign className="w-4 h-4" />
+                          Amount
+                        </div>
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-red-700">
+                        Description
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {expenses.length === 0 ? (
+                      <tr>
+                        <td colSpan={3} className="px-6 py-8 text-center text-slate-500">
+                          No expenses recorded yet
+                        </td>
+                      </tr>
+                    ) : (
+                      expenses.map((expense, index) => (
+                        <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors duration-200">
+                          <td className="px-6 py-4 text-sm font-medium text-slate-800">
+                            {new Date(expense.date).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric'
+                            })}
+                          </td>
+                          <td className="px-6 py-4 text-lg font-bold text-red-600">
+                            ${expense.amount.toLocaleString()}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-700 leading-relaxed">
+                            {expense.description}
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>

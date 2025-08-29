@@ -1,4 +1,4 @@
-import { DonationData, Donation } from '../types';
+import { DonationData, Donation, Expense } from '../types';
 
 export const saveDonationsToFile = async (donations: DonationData): Promise<void> => {
   try {
@@ -26,5 +26,32 @@ export const loadDonationsFromFile = async (): Promise<DonationData> => {
   } catch (error) {
     console.error('Error loading donations:', error);
     return {};
+  }
+};
+
+export const loadExpensesFromFile = async (): Promise<Expense[]> => {
+  try {
+    // Try to load from localStorage first
+    const stored = localStorage.getItem('expenses');
+    if (stored) {
+      return JSON.parse(stored);
+    }
+    
+    // Fallback to importing the JSON file
+    const { default: expensesData } = await import('../data/expenses.json');
+    return expensesData as Expense[];
+  } catch (error) {
+    console.error('Error loading expenses:', error);
+    return [];
+  }
+};
+
+export const saveExpensesToFile = async (expenses: Expense[]): Promise<void> => {
+  try {
+    localStorage.setItem('expenses', JSON.stringify(expenses, null, 2));
+    console.log('Expenses saved to localStorage');
+  } catch (error) {
+    console.error('Error saving expenses:', error);
+    throw new Error('Failed to save expenses');
   }
 };
