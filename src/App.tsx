@@ -64,6 +64,16 @@ function App() {
     }
   };
 
+  const getYearTotal = (year: number) => {
+    let total = 0;
+    months.forEach(month => {
+      const monthKey = `${year}-${month}`;
+      const monthDonations = donations[monthKey] || [];
+      total += monthDonations.reduce((sum, donation) => sum + donation.amount, 0);
+    });
+    return total;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-6">
       <div className="max-w-4xl w-full">
@@ -133,7 +143,7 @@ function App() {
                       {year}
                     </div>
                     <div className="text-lg font-semibold text-green-500 group-hover:scale-110 transition-transform duration-300">
-                      {index + 1}
+                      ${getYearTotal(year).toLocaleString()}
                     </div>
                   </div>
                   <div className="absolute inset-0 bg-green-500 rounded-xl opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
