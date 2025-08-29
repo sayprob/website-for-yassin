@@ -88,17 +88,6 @@ function App() {
               </p>
             </div>
 
-            {/* Database Info */}
-            <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-              <div className="flex items-center gap-3 justify-center">
-                <Database className="w-6 h-6 text-blue-600" />
-                <div className="text-center">
-                  <h3 className="font-semibold text-slate-800">Local JSON Database</h3>
-                  <p className="text-sm text-slate-600">Data loaded from src/data/donations.json</p>
-                </div>
-              </div>
-            </div>
-
             {/* Buttons Section */}
             <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
               {/* Left Button - Red */}
