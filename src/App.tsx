@@ -233,7 +233,7 @@ function App() {
       </div>
 
       <div className="max-w-4xl w-full">
-        {!showYears && !selectedYear && !showExpenses ? (
+        {!showYears && selectedYear === null && !showExpenses ? (
           <>
             {/* Header Section */}
             <div className="text-center mb-16">
@@ -277,7 +277,7 @@ function App() {
               </button>
             </div>
           </>
-        ) : showYears && !selectedYear && !showExpenses ? (
+        ) : showYears && selectedYear === null && !showExpenses ? (
           <>
             {/* Years Section */}
             <div className="text-center mb-16">
