@@ -1,50 +1,41 @@
 import React from 'react';
 import { useState } from 'react';
 import { Plus, ArrowLeft } from 'lucide-react';
+import { FileUpload } from './components/FileUpload';
+import { DonationData } from './types';
 
 function App() {
   const [showYears, setShowYears] = useState(false);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  const [donations, setDonations] = useState<{[key: string]: Array<{name: string, amount: number}>}>({});
+  const [donations, setDonations] = useState<DonationData>({});
   const [showAddForm, setShowAddForm] = useState<{month: string} | null>(null);
   const [newDonorName, setNewDonorName] = useState('');
   const [newDonorAmount, setNewDonorAmount] = useState('');
   
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  // Generate random donations for demo
-  const generateRandomDonations = (year: number) => {
-    const key = `${year}`;
-    if (donations[key]) return donations[key];
-
-    const randomNames = ['John Smith', 'Sarah Johnson', 'Mike Davis', 'Emily Brown', 'David Wilson', 'Lisa Garcia', 'Tom Anderson', 'Maria Rodriguez', 'James Taylor', 'Jennifer Lee'];
-    const newDonations: {[key: string]: Array<{name: string, amount: number}>} = {};
-    
-    months.forEach(month => {
-      const monthKey = `${year}-${month}`;
-      const numDonations = Math.floor(Math.random() * 4) + 1; // 1-4 donations per month
-      newDonations[monthKey] = [];
-      
-      for (let i = 0; i < numDonations; i++) {
-        newDonations[monthKey].push({
-          name: randomNames[Math.floor(Math.random() * randomNames.length)],
-          amount: Math.floor(Math.random() * 500) + 25 // $25-$525
-        });
+  // Get available years from the donations data
+  const getAvailableYears = () => {
+    const yearsSet = new Set<number>();
+    Object.keys(donations).forEach(key => {
+      const year = parseInt(key.split('-')[0]);
+      if (!isNaN(year)) {
+        yearsSet.add(year);
       }
     });
-    
-    setDonations(prev => ({ ...prev, ...newDonations }));
-    return newDonations;
+    return Array.from(yearsSet).sort((a, b) => b - a); // Sort descending
+  };
+
+  const handleDataLoaded = (data: DonationData) => {
+    setDonations(data);
+    setShowYears(true);
   };
 
   const handleYearClick = (year: number) => {
     setSelectedYear(year);
-    generateRandomDonations(year);
   };
 
   const handleAddDonation = (month: string) => {
@@ -75,8 +66,11 @@ function App() {
   };
 
   const getAllYearsTotal = () => {
+    const years = getAvailableYears();
     return years.reduce((total, year) => total + getYearTotal(year), 0);
   };
+
+  const availableYears = getAvailableYears();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-6">
@@ -89,9 +83,12 @@ function App() {
                 Welcome
               </h1>
               <p className="text-xl text-slate-600 font-light max-w-2xl mx-auto leading-relaxed">
-                Choose your path forward with a simple selection
+                Upload your Excel file to view donation data
               </p>
             </div>
+
+            {/* File Upload */}
+            <FileUpload onDataLoaded={handleDataLoaded} />
 
             {/* Buttons Section */}
             <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
@@ -107,15 +104,18 @@ function App() {
 
               {/* Right Button - Green */}
               <button 
-                onClick={() => setShowYears(true)}
-                className="group relative bg-white hover:bg-green-50 border-2 border-green-100 hover:border-green-200 rounded-2xl p-8 md:p-12 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[200px] md:min-w-[240px]"
+                onClick={() => availableYears.length > 0 && setShowYears(true)}
+                disabled={availableYears.length === 0}
+                className={`group relative ${availableYears.length > 0 ? 'bg-white hover:bg-green-50 border-2 border-green-100 hover:border-green-200' : 'bg-gray-100 border-2 border-gray-200 cursor-not-allowed'} rounded-2xl p-8 md:p-12 shadow-lg ${availableYears.length > 0 ? 'hover:shadow-xl' : ''} transition-all duration-300 ${availableYears.length > 0 ? 'transform hover:-translate-y-1' : ''} min-w-[200px] md:min-w-[240px]`}
               >
                 <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-green-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className={`text-4xl md:text-5xl font-bold ${availableYears.length > 0 ? 'text-green-500' : 'text-gray-400'} mb-4 ${availableYears.length > 0 ? 'group-hover:scale-110' : ''} transition-transform duration-300`}>
                     ${getAllYearsTotal().toLocaleString()}
                   </div>
                 </div>
-                <div className="absolute inset-0 bg-green-500 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+                {availableYears.length > 0 && (
+                  <div className="absolute inset-0 bg-green-500 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+                )}
               </button>
             </div>
           </>
@@ -136,7 +136,7 @@ function App() {
 
             {/* Year Buttons */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 justify-center">
-              {years.map((year, index) => (
+              {availableYears.map((year) => (
                 <button 
                   key={year}
                   onClick={() => handleYearClick(year)}
