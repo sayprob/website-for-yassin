@@ -1,8 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Plus, ArrowLeft, Database } from 'lucide-react';
+import { Plus, ArrowLeft, Settings, LogOut } from 'lucide-react';
 import { DonationData } from './types';
 import { loadDonationsFromFile, saveDonationsToFile } from './utils/fileManager';
+import { AdminLogin } from './components/AdminLogin';
 
 function App() {
   const [showYears, setShowYears] = useState(false);
@@ -13,6 +14,8 @@ function App() {
   const [newDonorAmount, setNewDonorAmount] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
   
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -26,6 +29,10 @@ function App() {
         const data = await loadDonationsFromFile();
         setDonations(data);
         setShowYears(true);
+        
+        // Check if user is already logged in as admin
+        const adminStatus = localStorage.getItem('isAdmin');
+        setIsAdmin(adminStatus === 'true');
       } catch (error) {
         console.error('Failed to load donations:', error);
       } finally {
@@ -35,6 +42,15 @@ function App() {
     
     loadData();
   }, []);
+
+  const handleAdminLogin = (success: boolean) => {
+    setIsAdmin(success);
+  };
+
+  const handleAdminLogout = () => {
+    localStorage.removeItem('isAdmin');
+    setIsAdmin(false);
+  };
 
   // Get available years from the donations data
   const getAvailableYears = () => {
@@ -134,6 +150,34 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-6">
+      {/* Admin Login Modal */}
+      <AdminLogin 
+        onLogin={handleAdminLogin}
+        isVisible={showAdminLogin}
+        onClose={() => setShowAdminLogin(false)}
+      />
+
+      {/* Admin Controls */}
+      <div className="fixed top-4 right-4 z-40">
+        {isAdmin ? (
+          <button
+            onClick={handleAdminLogout}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2"
+          >
+            <LogOut className="w-4 h-4" />
+            Logout Admin
+          </button>
+        ) : (
+          <button
+            onClick={() => setShowAdminLogin(true)}
+            className="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2"
+          >
+            <Settings className="w-4 h-4" />
+            Admin
+          </button>
+        )}
+      </div>
+
       <div className="max-w-4xl w-full">
         {!showYears && !selectedYear ? (
           <>
@@ -264,7 +308,7 @@ function App() {
                               ))}
                               
                               {/* Add Button */}
-                              {showAddForm?.month === month ? (
+                              {isAdmin && showAddForm?.month === month ? (
                                 <div className="bg-blue-50 rounded-lg p-3 border-2 border-blue-200">
                                   <input
                                     type="text"
@@ -297,14 +341,14 @@ function App() {
                                     </button>
                                   </div>
                                 </div>
-                              ) : (
+                              ) : isAdmin ? (
                                 <button
                                   onClick={() => setShowAddForm({month})}
                                   className="w-full bg-slate-100 hover:bg-slate-200 border-2 border-dashed border-slate-300 hover:border-slate-400 rounded-lg p-3 transition-all duration-200 group"
                                 >
                                   <Plus className="w-5 h-5 text-slate-400 group-hover:text-slate-600 mx-auto" />
                                 </button>
-                              )}
+                              ) : null}
                             </div>
                           </td>
                         );
