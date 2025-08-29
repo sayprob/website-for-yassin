@@ -1,8 +1,8 @@
 import React from 'react';
-import { useState } from 'react';
-import { Plus, ArrowLeft } from 'lucide-react';
-import { FileUpload } from './components/FileUpload';
+import { useState, useEffect } from 'react';
+import { Plus, ArrowLeft, Database } from 'lucide-react';
 import { DonationData } from './types';
+import donationsData from './data/donations.json';
 
 function App() {
   const [showYears, setShowYears] = useState(false);
@@ -17,6 +17,12 @@ function App() {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
+  // Load data from local JSON file on component mount
+  useEffect(() => {
+    setDonations(donationsData as DonationData);
+    setShowYears(true);
+  }, []);
+
   // Get available years from the donations data
   const getAvailableYears = () => {
     const yearsSet = new Set<number>();
@@ -27,11 +33,6 @@ function App() {
       }
     });
     return Array.from(yearsSet).sort((a, b) => b - a); // Sort descending
-  };
-
-  const handleDataLoaded = (data: DonationData) => {
-    setDonations(data);
-    setShowYears(true);
   };
 
   const handleYearClick = (year: number) => {
@@ -83,12 +84,20 @@ function App() {
                 Welcome
               </h1>
               <p className="text-xl text-slate-600 font-light max-w-2xl mx-auto leading-relaxed">
-                Upload your Excel file to view donation data
+                Donation tracking system with local database
               </p>
             </div>
 
-            {/* File Upload */}
-            <FileUpload onDataLoaded={handleDataLoaded} />
+            {/* Database Info */}
+            <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+              <div className="flex items-center gap-3 justify-center">
+                <Database className="w-6 h-6 text-blue-600" />
+                <div className="text-center">
+                  <h3 className="font-semibold text-slate-800">Local JSON Database</h3>
+                  <p className="text-sm text-slate-600">Data loaded from src/data/donations.json</p>
+                </div>
+              </div>
+            </div>
 
             {/* Buttons Section */}
             <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
@@ -102,7 +111,7 @@ function App() {
                 <div className="absolute inset-0 bg-red-500 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
               </button>
 
-              {/* Right Button - Green */}
+              {/* Right Button - Green with Total */}
               <button 
                 onClick={() => availableYears.length > 0 && setShowYears(true)}
                 disabled={availableYears.length === 0}
