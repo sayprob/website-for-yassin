@@ -74,6 +74,10 @@ function App() {
     return total;
   };
 
+  const getAllYearsTotal = () => {
+    return years.reduce((total, year) => total + getYearTotal(year), 0);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-6">
       <div className="max-w-4xl w-full">
@@ -109,6 +113,9 @@ function App() {
                 <div className="text-center">
                   <div className="text-6xl md:text-7xl font-bold text-green-500 mb-4 group-hover:scale-110 transition-transform duration-300">
                     2
+                  </div>
+                  <div className="text-lg font-semibold text-green-500 group-hover:scale-110 transition-transform duration-300">
+                    ${getAllYearsTotal().toLocaleString()}
                   </div>
                 </div>
                 <div className="absolute inset-0 bg-green-500 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
