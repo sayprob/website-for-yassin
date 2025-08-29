@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Plus, ArrowLeft, Database } from 'lucide-react';
 import { DonationData } from './types';
-import donationsData from './data/donations.json';
+import { loadDonationsFromFile, saveDonationsToFile } from './utils/fileManager';
 
 function App() {
   const [showYears, setShowYears] = useState(false);
@@ -11,16 +11,29 @@ function App() {
   const [showAddForm, setShowAddForm] = useState<{month: string} | null>(null);
   const [newDonorName, setNewDonorName] = useState('');
   const [newDonorAmount, setNewDonorAmount] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  // Load data from local JSON file on component mount
+  // Load data on component mount
   useEffect(() => {
-    setDonations(donationsData as DonationData);
-    setShowYears(true);
+    const loadData = async () => {
+      try {
+        const data = await loadDonationsFromFile();
+        setDonations(data);
+        setShowYears(true);
+      } catch (error) {
+        console.error('Failed to load donations:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadData();
   }, []);
 
   // Get available years from the donations data
@@ -39,16 +52,51 @@ function App() {
     setSelectedYear(year);
   };
 
-  const handleAddDonation = (month: string) => {
+  const handleAddDonation = async (month: string) => {
     if (newDonorName.trim() && newDonorAmount.trim() && selectedYear) {
       const monthKey = `${selectedYear}-${month}`;
       const amount = parseFloat(newDonorAmount);
       
       if (!isNaN(amount) && amount > 0) {
-        setDonations(prev => ({
+        setIsSaving(true);
+        
+        const updatedDonations = {
+          ...donations,
+          [monthKey]: [...(donations[monthKey] || []), { name: newDonorName.trim(), amount }]
+        };
+        
+        try {
+          await saveDonationsToFile(updatedDonations);
+          setDonations(updatedDonations);
+          setNewDonorName('');
+          setNewDonorAmount('');
+          setShowAddForm(null);
+        } catch (error) {
+          console.error('Failed to save donation:', error);
+          alert('Failed to save donation. Please try again.');
+        } finally {
+          setIsSaving(false);
+        }
+      }
+    }
+  };
+
+  const handleAddDonationOld = (month: string) => {
+    if (newDonorName.trim() && newDonorAmount.trim() && selectedYear) {
+      const monthKey = `${selectedYear}-${month}`;
+      const amount = parseFloat(newDonorAmount);
+      
+      if (!isNaN(amount) && amount > 0) {
+        setDonations(prev => {
+          const updated = {
           ...prev,
           [monthKey]: [...(prev[monthKey] || []), { name: newDonorName.trim(), amount }]
-        }));
+          };
+          
+          // Save to localStorage immediately
+          localStorage.setItem('donations', JSON.stringify(updated, null, 2));
+          return updated;
+        });
         setNewDonorName('');
         setNewDonorAmount('');
         setShowAddForm(null);
@@ -72,6 +120,17 @@ function App() {
   };
 
   const availableYears = getAvailableYears();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-600 mx-auto mb-4"></div>
+          <p className="text-slate-600">Loading donations...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-6">
@@ -224,12 +283,14 @@ function App() {
                                   <div className="flex gap-1">
                                     <button
                                       onClick={() => handleAddDonation(month)}
-                                      className="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-2 rounded transition-colors duration-200"
+                                      disabled={isSaving}
+                                      className="flex-1 bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white text-xs py-1 px-2 rounded transition-colors duration-200"
                                     >
-                                      Add
+                                      {isSaving ? 'Saving...' : 'Add'}
                                     </button>
                                     <button
                                       onClick={() => setShowAddForm(null)}
+                                      disabled={isSaving}
                                       className="flex-1 bg-slate-400 hover:bg-slate-500 text-white text-xs py-1 px-2 rounded transition-colors duration-200"
                                     >
                                       Cancel
