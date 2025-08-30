@@ -611,7 +611,7 @@ function App() {
                             })}
                           </td>
                           <td className="px-6 py-4 text-lg font-bold text-red-600">
-                            ${expense.amount.toLocaleString()}
+                            MAD{expense.amount.toLocaleString()}
                           </td>
                           <td className={`px-6 py-4 text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} leading-relaxed`}>
                             {expense.description}
