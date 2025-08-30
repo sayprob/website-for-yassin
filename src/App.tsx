@@ -424,7 +424,7 @@ function App() {
                                     {donation.name}
                                   </div>
                                   <div className="text-lg font-bold text-green-600">
-                                    ${donation.amount}
+                                    MAD{donation.amount}
                                   </div>
                                 </div>
                               ))}
