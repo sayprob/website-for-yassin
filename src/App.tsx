@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Plus, ArrowLeft, Settings, LogOut, Calendar, DollarSign, Moon, Sun } from 'lucide-react';
+import { Plus, ArrowLeft, Settings, LogOut, Calendar, DollarSign, Moon, Sun, Edit3 } from 'lucide-react';
 import { DonationData, Expense } from './types';
 import { loadDonationsFromFile, saveDonationsToFile, loadExpensesFromFile, saveExpensesToFile } from './utils/fileManager';
 import { AdminLogin } from './components/AdminLogin';
