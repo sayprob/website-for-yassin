@@ -302,7 +302,7 @@ function App() {
             {/* Header Section */}
             <div className="text-center mb-16">
               <h1 className={`text-5xl md:text-6xl font-light ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4 tracking-tight`}>
-                Welcome
+                
               </h1>
               <p className={`text-xl ${isDarkMode ? 'text-slate-300' : 'text-slate-600'} font-light max-w-2xl mx-auto leading-relaxed`}>
                 عَنْ أَبِي هُرَيْرَةَ رضي الله تعالى عنه: أَنَّ رَسُولَ اللَّهِ ﷺ قَالَ:( إِذَا مَاتَ ابنُ آدم انْقَطَعَ عَنْهُ عَمَلُهُ إِلَّا مِنْ ثَلَاثٍ: صَدَقَةٍ جَارِيَةٍ، أو عِلْمٍ يُنْتَفَعُ بِهِ، أَوْ وَلَدٍ صَالِحٍ يَدْعُو لَهُ). رَوَاهُ مُسْلِمٌ
