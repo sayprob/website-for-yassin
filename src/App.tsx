@@ -565,7 +565,7 @@ function App() {
                     disabled={isSaving || !newExpenseDate || !newExpenseAmount || !newExpenseDescription}
                     className="px-4 py-2 bg-red-500 hover:bg-red-600 disabled:bg-red-300 text-white rounded-lg transition-colors duration-200"
                   >
-                    {isSaving ? 'Saving...' : 'Add Expense'}
+                    {isSaving ? 'حفض...' : 'إضافة نفقة'}
                   </button>
                 </div>
               </div>
