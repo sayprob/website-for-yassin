@@ -352,7 +352,7 @@ function App() {
                 className={`${isDarkMode ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-700'} transition-colors duration-200 text-sm font-medium flex items-center gap-1 mx-auto`}
               >
                 <ArrowLeft className="w-4 h-4" />
-                Back to main
+                العودة إلى الصفحة الرئيسية
               </button>
             </div>
 
@@ -493,7 +493,7 @@ function App() {
                   className={`${isDarkMode ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-700'} transition-colors duration-200 text-sm font-medium flex items-center gap-1 mx-auto`}
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Back to main
+                  العودة إلى الصفحة الرئيسية
                 </button>
               </div>
               <div className="text-2xl font-bold text-red-500 mb-6">
