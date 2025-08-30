@@ -2,7 +2,7 @@
   "2024-January": [
     { "name": "John Smith", "amount": 500 },
     { "name": "Sarah Johnson", "amount": 250 },
-    { "name": "Mike Davis", "amount": 75000 }
+    { "name": "Mike Davis", "amount": 750 }
   ],
   "2024-February": [
     { "name": "Emily Brown", "amount": 300 },
@@ -19,18 +19,6 @@
     { "name": "Chris Wilson", "amount": 550 }
   ],
   "2023-November": [
-    { "name": "Jessica Brown", "amount": 275 },
-    { "name": "Daniel Miller", "amount": 625 }
-  ],
-  "2022-November": [
-    { "name": "Jessica Brown", "amount": 275 },
-    { "name": "Daniel Miller", "amount": 625 }
-  ],
-  "2021-November": [
-    { "name": "Jessica Brown", "amount": 275 },
-    { "name": "Daniel Miller", "amount": 625 }
-  ],
-  "2020-November": [
     { "name": "Jessica Brown", "amount": 275 },
     { "name": "Daniel Miller", "amount": 625 }
   ]
