@@ -541,7 +541,7 @@ function App() {
                     />
                   </div>
                   <div>
-                    <label className={`block text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} mb-2`}>Description</label>
+                    <label className={`block text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} mb-2`}>تفاصيل</label>
                     <input
                       type="text"
                       placeholder="What was this expense for?"
@@ -588,7 +588,7 @@ function App() {
                         </div>
                       </th>
                       <th className={`px-6 py-4 text-left text-sm font-semibold ${isDarkMode ? 'text-red-300' : 'text-red-700'}`}>
-                        Description
+                        تفاصيل
                       </th>
                     </tr>
                   </thead>
