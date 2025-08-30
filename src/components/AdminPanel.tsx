@@ -228,7 +228,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           value={tempExpenseDescription}
                           onChange={(e) => setTempExpenseDescription(e.target.value)}
                           className={`px-3 py-2 border ${isDarkMode ? 'border-slate-600 bg-slate-800 text-white' : 'border-slate-300 bg-white'} rounded focus:outline-none focus:border-blue-500`}
-                          placeholder="تفاصيل"
+                          placeholder="Description"
                         />
                       </div>
                       <div className="flex gap-2">
@@ -237,14 +237,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition-colors duration-200 flex items-center gap-2"
                         >
                           <Save className="w-4 h-4" />
-                          حفظ
+                          Save
                         </button>
                         <button
                           onClick={() => setEditingExpense(null)}
                           className={`${isDarkMode ? 'bg-slate-600 hover:bg-slate-500' : 'bg-slate-400 hover:bg-slate-500'} text-white px-4 py-2 rounded transition-colors duration-200 flex items-center gap-2`}
                         >
                           <X className="w-4 h-4" />
-                          إلغاء
+                          Cancel
                         </button>
                       </div>
                     </div>
