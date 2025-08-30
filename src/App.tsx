@@ -544,7 +544,7 @@ function App() {
                     <label className={`block text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} mb-2`}>تفاصيل</label>
                     <input
                       type="text"
-                      placeholder="What was this expense for?"
+                      placeholder="ما هي هذه النفقات؟"
                       value={newExpenseDescription}
                       onChange={(e) => setNewExpenseDescription(e.target.value)}
                       className={`w-full px-3 py-2 border ${isDarkMode ? 'border-slate-600 bg-slate-700 text-white' : 'border-slate-300 bg-white'} rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200`}
