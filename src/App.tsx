@@ -27,8 +27,8 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   
   const months = [
-    'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-    'يوليو', 'أغسطس', 'سبتمبر ', 'أكتوبر ', 'نوفمبر', 'ديسمبر'
+   'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
   // Load data on component mount
