@@ -382,7 +382,7 @@ function App() {
             {/* Donations Table Section */}
             <div className="text-center mb-8">
               <h1 className={`text-3xl md:text-4xl font-light ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-2 tracking-tight`}>
-                Donations for {selectedYear}
+                 {selectedYear}
               </h1>
               <div className="flex items-center justify-center gap-4">
                 <button 
@@ -451,7 +451,7 @@ function App() {
                                       disabled={isSaving}
                                       className="flex-1 bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white text-xs py-1 px-2 rounded transition-colors duration-200"
                                     >
-                                      {isSaving ? 'Saving...' : 'Add'}
+                                      {isSaving ? 'حفض...' : 'إضافة'}
                                     </button>
                                     <button
                                       onClick={() => setShowAddForm(null)}
