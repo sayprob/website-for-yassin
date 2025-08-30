@@ -271,7 +271,7 @@ function App() {
               {/* Left Button - Red */}
               <button 
                 onClick={handleRedButtonClick}
-                className={`group relative ${isDarkMode ? 'bg-slate-800 hover:bg-red-900 border-2 border-red-800 hover:border-red-700' : 'bg-white hover:bg-red-50 border-2 border-red-100 hover:border-red-200'} rounded-2xl p-8 md:p-12 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 min-w-[200px] md:min-w-[240px]`}
+                className={`group relative ${isDarkMode ? 'bg-slate-800 hover:bg-red-900 border-2 border-red-800 hover:border-red-700' : 'bg-white hover:bg-red-50 border-2 border-red-100 hover:border-red-200'} rounded-2xl p-8 md:p-12 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 w-[240px] h-[180px] flex items-center justify-center`}
               >
                 <div className="text-center">
                   <div className="text-6xl md:text-7xl font-bold text-red-500 mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -285,7 +285,7 @@ function App() {
               <button 
                 onClick={() => availableYears.length > 0 && setShowYears(true)}
                 disabled={availableYears.length === 0}
-                className={`group relative ${availableYears.length > 0 ? (isDarkMode ? 'bg-slate-800 hover:bg-green-900 border-2 border-green-800 hover:border-green-700' : 'bg-white hover:bg-green-50 border-2 border-green-100 hover:border-green-200') : (isDarkMode ? 'bg-slate-700 border-2 border-slate-600 cursor-not-allowed' : 'bg-gray-100 border-2 border-gray-200 cursor-not-allowed')} rounded-2xl p-8 md:p-12 shadow-lg ${availableYears.length > 0 ? 'hover:shadow-xl' : ''} transition-all duration-300 ${availableYears.length > 0 ? 'transform hover:-translate-y-1' : ''} min-w-[200px] md:min-w-[240px]`}
+                className={`group relative ${availableYears.length > 0 ? (isDarkMode ? 'bg-slate-800 hover:bg-green-900 border-2 border-green-800 hover:border-green-700' : 'bg-white hover:bg-green-50 border-2 border-green-100 hover:border-green-200') : (isDarkMode ? 'bg-slate-700 border-2 border-slate-600 cursor-not-allowed' : 'bg-gray-100 border-2 border-gray-200 cursor-not-allowed')} rounded-2xl p-8 md:p-12 shadow-lg ${availableYears.length > 0 ? 'hover:shadow-xl' : ''} transition-all duration-300 ${availableYears.length > 0 ? 'transform hover:-translate-y-1' : ''} w-[240px] h-[180px] flex items-center justify-center`}
               >
                 <div className="text-center">
                   <div className={`text-4xl md:text-5xl font-bold ${availableYears.length > 0 ? 'text-green-500' : 'text-gray-400'} mb-4 ${availableYears.length > 0 ? 'group-hover:scale-110' : ''} transition-transform duration-300`}>
