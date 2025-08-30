@@ -440,7 +440,7 @@ function App() {
                                   />
                                   <input
                                     type="number"
-                                    placeholder="Amount"
+                                    placeholder="المبلغ"
                                     value={newDonorAmount}
                                     onChange={(e) => setNewDonorAmount(e.target.value)}
                                     className={`w-full text-sm border ${isDarkMode ? 'border-slate-600 bg-slate-800 text-white' : 'border-slate-300 bg-white'} rounded px-2 py-1 mb-2 focus:outline-none focus:border-blue-500`}
@@ -530,7 +530,7 @@ function App() {
                     />
                   </div>
                   <div>
-                    <label className={`block text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} mb-2`}>Amount</label>
+                    <label className={`block text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} mb-2`}>المبلغ</label>
                     <input
                       type="number"
                       placeholder="0.00"
@@ -579,12 +579,12 @@ function App() {
                     <tr>
                       <th className={`px-6 py-4 text-left text-sm font-semibold ${isDarkMode ? 'text-red-300' : 'text-red-700'} flex items-center gap-2`}>
                         <Calendar className="w-4 h-4" />
-                        Date
+                        تاريخ
                       </th>
                       <th className={`px-6 py-4 text-left text-sm font-semibold ${isDarkMode ? 'text-red-300' : 'text-red-700'}`}>
                         <div className="flex items-center gap-2">
                           <DollarSign className="w-4 h-4" />
-                          Amount
+                          المبلغ
                         </div>
                       </th>
                       <th className={`px-6 py-4 text-left text-sm font-semibold ${isDarkMode ? 'text-red-300' : 'text-red-700'}`}>
