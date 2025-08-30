@@ -93,7 +93,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       <div className={`${isDarkMode ? 'bg-slate-800' : 'bg-white'} rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden`}>
         {/* Header */}
         <div className={`${isDarkMode ? 'bg-slate-700 border-b border-slate-600' : 'bg-slate-50 border-b border-slate-200'} p-6 flex items-center justify-between`}>
-          <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Admin Panel</h2>
+          <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>لوحة الإدارة</h2>
           <button
             onClick={onClose}
             className={`${isDarkMode ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-700'} transition-colors duration-200`}
@@ -113,7 +113,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   : (isDarkMode ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-800')
               }`}
             >
-              Donations
+              التبرعات
             </button>
             <button
               onClick={() => setActiveTab('expenses')}
@@ -123,7 +123,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   : (isDarkMode ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-800')
               }`}
             >
-              Expenses
+              النفقات
             </button>
           </div>
         </div>
@@ -147,14 +147,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                               value={tempDonationName}
                               onChange={(e) => setTempDonationName(e.target.value)}
                               className={`flex-1 px-3 py-2 border ${isDarkMode ? 'border-slate-600 bg-slate-700 text-white' : 'border-slate-300 bg-white'} rounded focus:outline-none focus:border-blue-500`}
-                              placeholder="Donor name"
+                              placeholder="إسم المتبرع"
                             />
                             <input
                               type="number"
                               value={tempDonationAmount}
                               onChange={(e) => setTempDonationAmount(e.target.value)}
                               className={`w-24 px-3 py-2 border ${isDarkMode ? 'border-slate-600 bg-slate-700 text-white' : 'border-slate-300 bg-white'} rounded focus:outline-none focus:border-blue-500`}
-                              placeholder="Amount"
+                              placeholder="المبلغ"
                             />
                             <div className="flex gap-2">
                               <button
@@ -221,7 +221,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           value={tempExpenseAmount}
                           onChange={(e) => setTempExpenseAmount(e.target.value)}
                           className={`px-3 py-2 border ${isDarkMode ? 'border-slate-600 bg-slate-800 text-white' : 'border-slate-300 bg-white'} rounded focus:outline-none focus:border-blue-500`}
-                          placeholder="Amount"
+                          placeholder="المبلغ"
                         />
                         <input
                           type="text"
