@@ -4,6 +4,7 @@ import { Plus, ArrowLeft, Settings, LogOut, Calendar, DollarSign, Moon, Sun } fr
 import { DonationData, Expense } from './types';
 import { loadDonationsFromFile, saveDonationsToFile, loadExpensesFromFile, saveExpensesToFile } from './utils/fileManager';
 import { AdminLogin } from './components/AdminLogin';
+import { AdminPanel } from './components/AdminPanel';
 
 function App() {
   const [showYears, setShowYears] = useState(false);
@@ -22,6 +23,7 @@ function App() {
   const [isSaving, setIsSaving] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   
   const months = [
@@ -67,6 +69,26 @@ function App() {
   const handleAdminLogout = () => {
     localStorage.removeItem('isAdmin');
     setIsAdmin(false);
+  };
+
+  const handleUpdateDonations = async (updatedDonations: DonationData) => {
+    try {
+      await saveDonationsToFile(updatedDonations);
+      setDonations(updatedDonations);
+    } catch (error) {
+      console.error('Failed to save donations:', error);
+      alert('Failed to save donations. Please try again.');
+    }
+  };
+
+  const handleUpdateExpenses = async (updatedExpenses: Expense[]) => {
+    try {
+      await saveExpensesToFile(updatedExpenses);
+      setExpenses(updatedExpenses);
+    } catch (error) {
+      console.error('Failed to save expenses:', error);
+      alert('Failed to save expenses. Please try again.');
+    }
   };
 
   const toggleDarkMode = () => {
@@ -222,6 +244,18 @@ function App() {
         onClose={() => setShowAdminLogin(false)}
       />
 
+      {/* Admin Panel Modal */}
+      {showAdminPanel && (
+        <AdminPanel
+          donations={donations}
+          expenses={expenses}
+          onUpdateDonations={handleUpdateDonations}
+          onUpdateExpenses={handleUpdateExpenses}
+          onClose={() => setShowAdminPanel(false)}
+          isDarkMode={isDarkMode}
+        />
+      )}
+
       {/* Admin Controls */}
       <div className="fixed top-4 right-4 z-40 flex gap-2">
         {/* Dark Mode Toggle */}
@@ -235,13 +269,22 @@ function App() {
         {/* Admin Button */}
         <div>
           {isAdmin ? (
-            <button
-              onClick={handleAdminLogout}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2"
-            >
-              <LogOut className="w-4 h-4" />
-              Logout
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowAdminPanel(true)}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2"
+              >
+                <Edit3 className="w-4 h-4" />
+                Edit
+              </button>
+              <button
+                onClick={handleAdminLogout}
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </button>
+            </div>
           ) : (
             <button
               onClick={() => setShowAdminLogin(true)}
