@@ -424,7 +424,7 @@ function App() {
                                     {donation.name}
                                   </div>
                                   <div className="text-lg font-bold text-green-600">
-                                    mad{donation.amount}
+                                    ${donation.amount}
                                   </div>
                                 </div>
                               ))}
@@ -498,7 +498,7 @@ function App() {
                 </button>
               </div>
               <div className="text-2xl font-bold text-red-500 mb-6">
-                إجمالي النفقات: mad{getTotalExpenses().toLocaleString()}
+                إجمالي النفقات: ${getTotalExpenses().toLocaleString()}
               </div>
             </div>
 
@@ -611,7 +611,7 @@ function App() {
                             })}
                           </td>
                           <td className="px-6 py-4 text-lg font-bold text-red-600">
-                            mad{expense.amount.toLocaleString()}
+                            ${expense.amount.toLocaleString()}
                           </td>
                           <td className={`px-6 py-4 text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} leading-relaxed`}>
                             {expense.description}
