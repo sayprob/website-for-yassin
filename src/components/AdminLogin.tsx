@@ -46,8 +46,8 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, isVisible, onCl
           <div className="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
             <Lock className="w-8 h-8 text-slate-600 dark:text-slate-300" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">Admin Login</h2>
-          <p className="text-slate-600 dark:text-slate-300">Enter admin password to manage donations</p>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">تسجيل الدخول </h2>
+          <p className="text-slate-600 dark:text-slate-300">أدخل كلمة مرور لإدارة التبرعات</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -56,7 +56,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, isVisible, onCl
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter admin password"
+              placeholder="أدخل كلمة المرور"
               className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
               required
             />
@@ -88,7 +88,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, isVisible, onCl
               disabled={isLoading}
               className="flex-1 px-4 py-3 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white rounded-lg transition-colors duration-200"
             >
-              {isLoading ? 'Checking...' : 'Login'}
+              {isLoading ? 'التحقق...' : 'تسجيل الدخول'}
             </button>
           </div>
         </form>
