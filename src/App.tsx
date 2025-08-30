@@ -346,7 +346,6 @@ function App() {
             {/* Years Section */}
             <div className="text-center mb-16">
               <h1 className={`text-4xl md:text-5xl font-light ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4 tracking-tight`}>
-                Select a Year
               </h1>
               <button 
                 onClick={() => setShowYears(false)}
