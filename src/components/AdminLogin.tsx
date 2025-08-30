@@ -93,11 +93,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, isVisible, onCl
           </div>
         </form>
 
-        <div className="mt-6 text-center">
-          <p className="text-xs text-slate-400 dark:text-slate-500">
-            Default password: admin123
-          </p>
-        </div>
+        
       </div>
     </div>
   );
