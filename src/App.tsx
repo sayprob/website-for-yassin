@@ -390,7 +390,7 @@ function App() {
                   className={`${isDarkMode ? 'text-slate-400 hover:text-slate-200' : 'text-slate-500 hover:text-slate-700'} transition-colors duration-200 text-sm font-medium flex items-center gap-1 mx-auto`}
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Back to years
+                  العودة إلى السنوات
                 </button>
               </div>
             </div>
@@ -433,7 +433,7 @@ function App() {
                                 <div className={`${isDarkMode ? 'bg-blue-900 border-2 border-blue-700' : 'bg-blue-50 border-2 border-blue-200'} rounded-lg p-3`}>
                                   <input
                                     type="text"
-                                    placeholder="Donor name"
+                                    placeholder="إسم المتبرع"
                                     value={newDonorName}
                                     onChange={(e) => setNewDonorName(e.target.value)}
                                     className={`w-full text-sm border ${isDarkMode ? 'border-slate-600 bg-slate-800 text-white' : 'border-slate-300 bg-white'} rounded px-2 py-1 mb-2 focus:outline-none focus:border-blue-500`}
@@ -458,7 +458,7 @@ function App() {
                                       disabled={isSaving}
                                       className={`flex-1 ${isDarkMode ? 'bg-slate-600 hover:bg-slate-500' : 'bg-slate-400 hover:bg-slate-500'} text-white text-xs py-1 px-2 rounded transition-colors duration-200`}
                                     >
-                                      Cancel
+                                      إلغاء
                                     </button>
                                   </div>
                                 </div>
@@ -509,7 +509,7 @@ function App() {
                   className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2 mx-auto"
                 >
                   <Plus className="w-5 h-5" />
-                  Add Expense
+                  إضافة نفقة
                 </button>
               </div>
             )}
@@ -517,10 +517,10 @@ function App() {
             {/* Add Expense Form */}
             {isAdmin && showAddExpenseForm && (
               <div className={`${isDarkMode ? 'bg-slate-800' : 'bg-white'} rounded-2xl shadow-lg p-6 mb-6`}>
-                <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4`}>Add New Expense</h3>
+                <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4`}>إضافة نفقة جديدة</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className={`block text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} mb-2`}>Date</label>
+                    <label className={`block text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'} mb-2`}>تاريخ</label>
                     <input
                       type="date"
                       value={newExpenseDate}
@@ -558,7 +558,7 @@ function App() {
                     disabled={isSaving}
                     className={`px-4 py-2 border ${isDarkMode ? 'border-slate-600 text-slate-300 hover:bg-slate-700' : 'border-slate-300 text-slate-700 hover:bg-slate-50'} rounded-lg transition-colors duration-200`}
                   >
-                    Cancel
+                    إلغاء
                   </button>
                   <button
                     onClick={handleAddExpense}
@@ -596,7 +596,7 @@ function App() {
                     {expenses.length === 0 ? (
                       <tr>
                         <td colSpan={3} className={`px-6 py-8 text-center ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                          No expenses recorded yet
+                          لم يتم تسجيل أي نفقات حتى الآن
                         </td>
                       </tr>
                     ) : (
