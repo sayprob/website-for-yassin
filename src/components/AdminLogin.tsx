@@ -30,7 +30,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, isVisible, onCl
       setPassword('');
       onClose();
     } else {
-      setError('Incorrect password');
+      setError('كلمة المرور غير صحيحة');
       onLogin(false);
     }
     
@@ -81,7 +81,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin, isVisible, onCl
               onClick={onClose}
               className="flex-1 px-4 py-3 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-200"
             >
-              Cancel
+              إلغاء
             </button>
             <button
               type="submit"
