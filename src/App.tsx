@@ -424,7 +424,7 @@ function App() {
                                     {donation.name}
                                   </div>
                                   <div className="text-lg font-bold text-green-600">
-                                    MAD{donation.amount}
+                                    mad{donation.amount}
                                   </div>
                                 </div>
                               ))}
@@ -486,7 +486,7 @@ function App() {
             {/* Expenses Table Section */}
             <div className="text-center mb-8">
               <h1 className={`text-3xl md:text-4xl font-light ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-2 tracking-tight`}>
-                Expenses Overview
+                النفقات
               </h1>
               <div className="flex items-center justify-center gap-4 mb-4">
                 <button 
@@ -498,7 +498,7 @@ function App() {
                 </button>
               </div>
               <div className="text-2xl font-bold text-red-500 mb-6">
-                Total Expenses: ${getTotalExpenses().toLocaleString()}
+                إجمالي النفقات: mad{getTotalExpenses().toLocaleString()}
               </div>
             </div>
 
