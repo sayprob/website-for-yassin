@@ -275,14 +275,14 @@ function App() {
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2"
               >
                 <Edit3 className="w-5 h-5" />
-                Edit
+                تعديل
               </button>
               <button
                 onClick={handleAdminLogout}
                 className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2"
               >
                 <LogOut className="w-5 h-5" />
-                Logout
+                تسجيل الخروج
               </button>
             </div>
           ) : (
