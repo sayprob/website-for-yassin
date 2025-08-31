@@ -1,6 +1,10 @@
 {
   "2025-January": [
     {
+      "name": "John Smith",
+      "amount": 500
+    },
+    {
       "name": "Sarah Johnson",
       "amount": 250
     },
