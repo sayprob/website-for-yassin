@@ -2,7 +2,7 @@
   "2025-January": [
     {
       "name": "John Smith",
-      "amount": 50000000000000000000
+      "amount": 500
     },
     {
       "name": "Sarah Johnson",
@@ -24,7 +24,7 @@
     },
     {
       "name": "Mike Davis",
-      "amount": 60
+      "amount": 75
     }
   ],
   "2024-February": [
@@ -99,6 +99,10 @@
     {
       "name": "Jessica Brown",
       "amount": 275
+    },
+    {
+      "name": "Daniel Miller",
+      "amount": 625
     }
   ]
 }
