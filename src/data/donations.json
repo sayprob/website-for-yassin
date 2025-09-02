@@ -121,6 +121,10 @@
     {
       "name": "ccccc",
       "amount": 35415
+    },
+    {
+      "name": "d",
+      "amount": 1e+35
     }
   ]
 }
