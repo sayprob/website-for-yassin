@@ -1,23 +1,6 @@
 {
-  "2025-January": [
-    {
-      "name": "Sarah Johnson",
-      "amount": 250
-    },
-    {
-      "name": "Mike Davis",
-      "amount": 750
-    },
-    {
-      "name": "bb",
-      "amount": 6000
-    }
-  ],
+  "2025-January": [],
   "2024-January": [
-    {
-      "name": "John Smith",
-      "amount": 500
-    },
     {
       "name": "Sarah Johnson",
       "amount": 250
