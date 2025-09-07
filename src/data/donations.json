@@ -1,10 +1,6 @@
 {
   "2025-January": [
     {
-      "name": "John Smith",
-      "amount": 500
-    },
-    {
       "name": "Sarah Johnson",
       "amount": 250
     },
@@ -132,12 +128,6 @@
     {
       "name": "ada",
       "amount": 4
-    }
-  ],
-  "2025-December": [
-    {
-      "name": "Hh",
-      "amount": 1000
     }
   ]
 }
